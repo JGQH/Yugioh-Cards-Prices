@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QMdiSubWindow, QLabel, QLineEdit, QPushButton
+from Extras.WebCard import WebCard
 import json
 
 class MdiSearcher(QMdiSubWindow):
@@ -37,10 +38,11 @@ class MdiSearcher(QMdiSubWindow):
         def doSearch():
             cardName = lieSearch.text()
             btnSearch.setEnabled(False)
-            results = self.main.showScraper(cardName)
-            
+            results = self.main.createScraper(cardName)
+
             if(results["status"] == "success"):
-                print(json.dumps(results, indent=3))
-                lieSearch.clear()
+                card = WebCard(cardName, results)
+                if self.main.saveCard(card):
+                    lieSearch.clear()
             btnSearch.setEnabled(True)
         btnSearch.clicked.connect(doSearch)

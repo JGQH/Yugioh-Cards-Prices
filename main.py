@@ -1,12 +1,15 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QMdiArea
 import sys
+import json
 
 from Windows.MdiSearcher import MdiSearcher
 from Extras.WebScraper import WebScraper
+from Extras.WebCard import WebCard
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.cardList = {}
         #Add menu options
         mnbMainMenu = self.menuBar()
 
@@ -30,6 +33,12 @@ class MainWindow(QMainWindow):
     def createScraper(self, cardName)->dict:
         scraper = WebScraper(self)
         return scraper.doSearch(cardName)
+
+    def saveCard(self, card:WebCard)->bool:
+        if(card.name in self.cardList): return False #Already in the card list
+
+        self.cardList[card.name] = card
+        return True
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
