@@ -4,6 +4,12 @@ class WebCard():
     def __init__(self, cardName, results):
         self.name = cardName
         self.processData(results["data"])
+        self.quantity = 1
+
+        self.selectedPrice = {
+            "index": 0,
+            "price": "average"
+        }
 
     def processData(self, data):
         self.data = []
@@ -23,3 +29,8 @@ class WebCard():
                         "highest": price_data["high"]
                     }
                 })
+
+    def getPrice(self):
+        index = self.selectedPrice["index"]
+        price = self.selectedPrice["price"]
+        return self.data[index]["prices"][price] * self.quantity
