@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QMdiArea
 import sys
 
 from Windows.MdiSearcher import MdiSearcher
+from Extras.WebScraper import WebScraper
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -25,6 +26,10 @@ class MainWindow(QMainWindow):
             searcher = MdiSearcher(self)
             self.mdi.addSubWindow(searcher)
             searcher.show()
+
+    def createScraper(self, cardName)->dict:
+        scraper = WebScraper(self)
+        return scraper.doSearch(cardName)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
