@@ -36,7 +36,7 @@ class MdiSearcher(QMdiSubWindow):
         btnSearch.move(8+250, 25+29)
         btnSearch.setText("Search")
 
-        tblSearches = WebTable(self)
+        tblSearches = WebTable(self, self.main)
         tblSearches.move(8+10, 25+60)
         tblSearches.resize(310, 530)
         tblSearches.addRows(self.main.cardList)

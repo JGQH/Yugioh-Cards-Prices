@@ -3,6 +3,7 @@ import sys
 import json
 
 from Windows.MdiSearcher import MdiSearcher
+from Windows.MdiViewer import MdiViewer
 from Extras.WebScraper import WebScraper
 from Extras.WebCard import WebCard
 class MainWindow(QMainWindow):
@@ -22,7 +23,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.mdi)
 
         #Finish Styling
-        self.setWindowTitle("Organizador de Horario")
+        self.setWindowTitle("YuGiOh - Cards Prices")
 
     def showSearcher(self):
         if(not MdiSearcher.isShown):
@@ -39,6 +40,13 @@ class MainWindow(QMainWindow):
 
         self.cardList[card.name] = card
         return True
+
+    def showViewer(self, card:WebCard, setPrice):
+        if(not MdiViewer.isShown):
+            viewer = MdiViewer(self, card, setPrice)
+            self.mdi.addSubWindow(viewer)
+            viewer.show()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

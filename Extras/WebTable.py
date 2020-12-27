@@ -2,8 +2,9 @@ from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QPushButton
 from Extras.WebCard import WebCard
 
 class WebTable(QTableWidget):
-    def __init__(self, parent):
+    def __init__(self, parent, main):
         super().__init__(0, 3, parent)
+        self.main = main
         self.setHorizontalHeaderLabels(["Card Name", "Selected Price", "Changer"])
         
     def addRows(self, cardList:dict):
@@ -17,11 +18,13 @@ class WebTable(QTableWidget):
 
         self.setItem(row, 0, QTableWidgetItem(card.name))
 
-        priceTag = "$%s (x%i)" % (card.getPrice(), card.quantity)
-        self.setItem(row, 1, QTableWidgetItem(priceTag))
+        def setPrice():
+            priceTag = "$%s (x%i)" % (card.getPrice(), card.quantity)
+            self.setItem(row, 1, QTableWidgetItem(priceTag))
+        setPrice()
 
         def doModify():
-            print("Changing card in row %s (Name: %s)" % (row, card.name))
+            self.main.showViewer(card, setPrice)
 
         btnModify = QPushButton(self)
         btnModify.setText("Modify")
