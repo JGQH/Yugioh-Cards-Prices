@@ -30,7 +30,14 @@ class WebCard():
                     }
                 })
 
-    def getPrice(self):
+    def getPrice(self)->float:
         index = self.selectedPrice["index"]
         price = self.selectedPrice["price"]
         return self.data[index]["prices"][price] * self.quantity
+
+    def getSets(self)->list:
+        return [info["setName"] for info in self.data]
+
+    def getRarity(self, index)->str:
+        self.selectedPrice["index"] = index
+        return self.data[index]["rarity"]
