@@ -19,7 +19,7 @@ class WebTable(QTableWidget):
         self.setItem(row, 0, QTableWidgetItem(card.name))
 
         def setPrice():
-            priceTag = "$%s (x%i)" % (card.getPrice(), card.quantity)
+            priceTag = "$%s (x%i)" % ("{:.2f}".format(card.getPrice()), card.quantity)
             self.setItem(row, 1, QTableWidgetItem(priceTag))
         setPrice()
 

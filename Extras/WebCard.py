@@ -39,8 +39,9 @@ class WebCard():
         return [info["setName"] for info in self.data]
 
     def setTag(self, tag):
+        index = self.selectedPrice["index"]
         self.selectedPrice["tag"] = tag
-        return self.getPrice()
+        return self.data[index]["prices"][tag]
 
     def setIndex(self, index)->str:
         self.selectedPrice["index"] = index

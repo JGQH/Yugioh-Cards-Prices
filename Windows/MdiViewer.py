@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMdiSubWindow, QLabel, QComboBox
+from PyQt5.QtWidgets import QMdiSubWindow, QLabel, QComboBox, QSpinBox
 from PyQt5.QtGui import QFont
 from Extras.WebCard import WebCard
 
@@ -9,7 +9,7 @@ class MdiViewer(QMdiSubWindow):
         super().__init__(parent)
         MdiViewer.isShown = True
         self.main = parent
-        self.setGeometry(0, 0, 16+230, 33+300)
+        self.setGeometry(0, 0, 16+230, 33+140)
         self.setFrame(card, setPrice)
 
     def closeEvent(self, event):
@@ -51,9 +51,32 @@ class MdiViewer(QMdiSubWindow):
         lstPrice.resize(70, 20)
         lstPrice.addItems(["Lowest", "Average", "Highest"])
 
+        #Select Quantity
+        lblQuantity = QLabel(self)
+        lblQuantity.move(8+170, 25+90)
+        lblQuantity.resize(50, 20)
+        lblQuantity.setText("Quantity:")
+
+        spbQuantity = QSpinBox(self)
+        spbQuantity.move(8+170, 25+110)
+        spbQuantity.resize(50, 20)
+        spbQuantity.setMinimum(1)
+        spbQuantity.setValue(card.quantity)
+
+        #Change tag
+        def changeTag(index):
+            price = card.setTag(index)
+            lblPrice.setText("Price: $%s" % price)
+            setPrice()
+
+        tag = card.selectedPrice["tag"]
+        lstPrice.setCurrentIndex(tag)
+        lstPrice.currentIndexChanged.connect(changeTag)
+
         #Change set
         def changeSet(index):
             rarity = card.setIndex(index)
+            changeTag(lstPrice.currentIndex())
             lblRarity.setText("Rarity: \n [%s]" % rarity)
         
         index = card.selectedPrice["index"]
@@ -61,12 +84,8 @@ class MdiViewer(QMdiSubWindow):
         lstSet.currentIndexChanged.connect(changeSet)
         changeSet(index)
 
-        #Change price
-        def changePrice(index):
-            price = card.setTag(index)
-            lblPrice.setText("Price: $%s" % price)
-
-        tag = card.selectedPrice["tag"]
-        lstPrice.setCurrentIndex(tag)
-        lstPrice.currentIndexChanged.connect(changePrice)
-        changePrice(tag)
+        #Change Quantity
+        def changeQuantity(self):
+            card.quantity = spbQuantity.value()
+            setPrice()
+        spbQuantity.valueChanged.connect(changeQuantity)
