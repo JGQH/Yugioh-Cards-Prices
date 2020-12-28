@@ -7,8 +7,8 @@ class WebCard():
         self.quantity = 1
 
         self.selectedPrice = {
-            "index": 0,
-            "price": "average"
+            "index": len(self.data) - 1,
+            "tag": 1
         }
 
     def processData(self, data):
@@ -23,21 +23,25 @@ class WebCard():
                     "setName": info["name"],
                     "printName": info["print_tag"],
                     "rarity": info["rarity"],
-                    "prices": {
-                        "lowest": price_data["low"],
-                        "average": price_data["average"],
-                        "highest": price_data["high"]
-                    }
+                    "prices": [
+                        price_data["low"],
+                        price_data["average"],
+                        price_data["high"]
+                    ]
                 })
 
     def getPrice(self)->float:
         index = self.selectedPrice["index"]
-        price = self.selectedPrice["price"]
-        return self.data[index]["prices"][price] * self.quantity
+        tag = self.selectedPrice["tag"]
+        return self.data[index]["prices"][tag] * self.quantity
 
     def getSets(self)->list:
         return [info["setName"] for info in self.data]
 
-    def getRarity(self, index)->str:
+    def setTag(self, tag):
+        self.selectedPrice["tag"] = tag
+        return self.getPrice()
+
+    def setIndex(self, index)->str:
         self.selectedPrice["index"] = index
         return self.data[index]["rarity"]

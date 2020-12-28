@@ -38,11 +38,35 @@ class MdiViewer(QMdiSubWindow):
 
         #Rarity display
         lblRarity = QLabel(self)
-        lblRarity.move(8+10, 25+70)
-        lblRarity.resize(50, 50)
+        lblRarity.move(8+10, 25+90)
+        lblRarity.resize(70, 40)
 
+        #Select Price
+        lblPrice = QLabel(self)
+        lblPrice.move(8+90, 25+90)
+        lblPrice.resize(70, 20)
+
+        lstPrice = QComboBox(self)
+        lstPrice.move(8+90, 25+110)
+        lstPrice.resize(70, 20)
+        lstPrice.addItems(["Lowest", "Average", "Highest"])
+
+        #Change set
         def changeSet(index):
-            rarity = card.getRarity(index)
+            rarity = card.setIndex(index)
             lblRarity.setText("Rarity: \n [%s]" % rarity)
+        
+        index = card.selectedPrice["index"]
+        lstSet.setCurrentIndex(index)
         lstSet.currentIndexChanged.connect(changeSet)
-        lstSet.setCurrentIndex(0)
+        changeSet(index)
+
+        #Change price
+        def changePrice(index):
+            price = card.setTag(index)
+            lblPrice.setText("Price: $%s" % price)
+
+        tag = card.selectedPrice["tag"]
+        lstPrice.setCurrentIndex(tag)
+        lstPrice.currentIndexChanged.connect(changePrice)
+        changePrice(tag)
