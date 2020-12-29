@@ -4,6 +4,7 @@ from Extras.WebCard import WebCard
 class WebTable(QTableWidget):
     def __init__(self, parent, main):
         super().__init__(0, 3, parent)
+        self.parent = parent
         self.main = main
         self.setHorizontalHeaderLabels(["Card Name", "Selected Price", "Changer"])
         
@@ -21,6 +22,7 @@ class WebTable(QTableWidget):
         def setPrice():
             priceTag = "$%s (x%i)" % ("{:.2f}".format(card.getPrice()), card.quantity)
             self.setItem(row, 1, QTableWidgetItem(priceTag))
+            self.parent.showTotal()
         setPrice()
 
         def doModify():

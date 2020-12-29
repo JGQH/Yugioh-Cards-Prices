@@ -12,6 +12,7 @@ class MdiSearcher(QMdiSubWindow):
         self.setGeometry(0, 0, 16+330, 33+600)
         self.main = parent
         self.setFrame()
+        self.showTotal()
 
     def closeEvent(self, event):
         MdiSearcher.isShown = False
@@ -38,7 +39,7 @@ class MdiSearcher(QMdiSubWindow):
 
         tblSearches = WebTable(self, self.main)
         tblSearches.move(8+10, 25+60)
-        tblSearches.resize(310, 530)
+        tblSearches.resize(310, 500)
         tblSearches.addRows(self.main.cardList)
 
         def doSearch():
@@ -53,3 +54,15 @@ class MdiSearcher(QMdiSubWindow):
                     lieSearch.clear()
             btnSearch.setEnabled(True)
         btnSearch.clicked.connect(doSearch)
+
+        lblTotal = QLabel(self)
+        lblTotal.move(8+10, 25+570)
+        lblTotal.resize(310, 20)
+        self.lblTotal = lblTotal
+
+    def showTotal(self):
+        price = 0
+        for key in self.main.cardList:
+            card:WebCard = self.main.cardList[key]
+            price += card.getPrice()
+        self.lblTotal.setText("Total price: $%s" % "{:.2f}".format(price))
