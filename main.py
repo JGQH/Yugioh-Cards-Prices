@@ -6,6 +6,7 @@ from Windows.MdiSearcher import MdiSearcher
 from Windows.MdiViewer import MdiViewer
 from Extras.WebScraper import WebScraper
 from Extras.WebCard import WebCard
+from Extras.WebLoader import WebLoader
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -14,9 +15,15 @@ class MainWindow(QMainWindow):
         #Add menu options
         mnbMainMenu = self.menuBar()
 
-        actSearcher = QAction("Search", self)
+        #Searcher
+        mnuName = mnbMainMenu.addMenu("Search")
+        actSearcher = QAction("By cards' names", self)
         actSearcher.triggered.connect(self.showSearcher)
-        mnbMainMenu.addAction(actSearcher)
+        mnuName.addAction(actSearcher)
+        
+        actDeck = QAction("By .ydk file", self)
+        actDeck.triggered.connect(self.showDeck)
+        mnuName.addAction(actDeck)
 
         #MDI
         self.mdi = QMdiArea()
@@ -30,6 +37,13 @@ class MainWindow(QMainWindow):
             searcher = MdiSearcher(self)
             self.mdi.addSubWindow(searcher)
             searcher.show()
+
+    def showDeck(self):
+        if(not MdiSearcher.isShown):
+            loader = WebLoader()
+            if(loader.loadYdk()):
+                self.cardList = loader.cardList
+                self.showSearcher()
 
     def createScraper(self, cardName)->dict:
         scraper = WebScraper(self)
