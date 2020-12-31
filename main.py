@@ -16,14 +16,9 @@ class MainWindow(QMainWindow):
         mnbMainMenu = self.menuBar()
 
         #Searcher
-        mnuName = mnbMainMenu.addMenu("Search")
-        actSearcher = QAction("By cards' names", self)
-        actSearcher.triggered.connect(self.showSearcher)
-        mnuName.addAction(actSearcher)
-        
-        actDeck = QAction("By .ydk file", self)
+        actDeck = QAction("Upload", self)
         actDeck.triggered.connect(self.showDeck)
-        mnuName.addAction(actDeck)
+        mnbMainMenu.addAction(actDeck)
 
         #MDI
         self.mdi = QMdiArea()
@@ -31,12 +26,6 @@ class MainWindow(QMainWindow):
 
         #Finish Styling
         self.setWindowTitle("YuGiOh - Cards Prices")
-
-    def showSearcher(self):
-        if(not MdiSearcher.isShown):
-            searcher = MdiSearcher(self)
-            self.mdi.addSubWindow(searcher)
-            searcher.show()
 
     def showDeck(self):
         if(not MdiSearcher.isShown):
