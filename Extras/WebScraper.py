@@ -2,15 +2,16 @@ import requests
 import json
 
 class WebScraper():
-    def __init__(self, parent):
-        self.main = parent
+    API_URL = "http://elukia.pythonanywhere.com"
 
-    def doSearch(self, cardName)->dict:
-        response = requests.get("http://yugiohprices.com/api/get_card_prices/" + cardName)
+    def __init__(self):
+        pass
+
+    def doPricing(self, ydk)->dict:
+        response = requests.post(
+           "{}/process_ydk".format(WebScraper.API_URL), data=ydk
+        )
 
         if(response.status_code == 200):
             return response.json()
-        else:
-            return {
-                "status": "fail"
-            }
+        return {}

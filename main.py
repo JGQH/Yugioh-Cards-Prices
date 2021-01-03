@@ -32,17 +32,14 @@ class MainWindow(QMainWindow):
             loader = WebLoader()
             if(loader.loadYdk()):
                 self.cardList = loader.cardList
-                self.showSearcher()
+                
+                searcher = MdiSearcher(self)
+                self.mdi.addSubWindow(searcher)
+                searcher.show()
 
     def createScraper(self, cardName)->dict:
         scraper = WebScraper(self)
         return scraper.doSearch(cardName)
-
-    def saveCard(self, card:WebCard)->bool:
-        if(card.name in self.cardList): return False #Already in the card list
-
-        self.cardList[card.name] = card
-        return True
 
     def showViewer(self, card:WebCard, setPrice):
         if(not MdiViewer.isShown):

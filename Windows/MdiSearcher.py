@@ -9,7 +9,7 @@ class MdiSearcher(QMdiSubWindow):
     def __init__(self, parent):
         super().__init__(parent)
         MdiSearcher.isShown = True
-        self.setGeometry(0, 0, 16+400, 33+600)
+        self.setGeometry(0, 0, 16+500, 33+600)
         self.main = parent
         self.setFrame()
         self.showTotal()
@@ -21,15 +21,15 @@ class MdiSearcher(QMdiSubWindow):
     def setFrame(self):
         self.setWindowTitle(".:. Searcher .:.")
 
+        lblTotal = QLabel(self)
+        lblTotal.move(8+10, 25+570)
+        lblTotal.resize(480, 20)
+        self.lblTotal = lblTotal
+
         tblSearches = WebTable(self, self.main)
         tblSearches.move(8+10, 25+10)
-        tblSearches.resize(380, 500)
+        tblSearches.resize(480, 550)
         tblSearches.addRows(self.main.cardList)
-
-        lblTotal = QLabel(self)
-        lblTotal.move(8+10, 25+520)
-        lblTotal.resize(380, 20)
-        self.lblTotal = lblTotal
 
     def showTotal(self):
         price = 0
