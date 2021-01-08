@@ -4,9 +4,9 @@ import json
 
 from Windows.MdiSearcher import MdiSearcher
 from Windows.MdiViewer import MdiViewer
+from Windows.MdiLoader import MdiLoader
 from Extras.WebScraper import WebScraper
 from Extras.WebCard import WebCard
-from Extras.WebLoader import WebLoader
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
 
         #Searcher
         actDeck = QAction("Upload", self)
-        actDeck.triggered.connect(self.showDeck)
+        actDeck.triggered.connect(self.showLoader)
         mnbMainMenu.addAction(actDeck)
 
         #MDI
@@ -27,15 +27,19 @@ class MainWindow(QMainWindow):
         #Finish Styling
         self.setWindowTitle("YuGiOh - Cards Prices")
 
-    def showDeck(self):
-        if(not MdiSearcher.isShown):
-            loader = WebLoader()
-            if(loader.loadYdk()):
-                self.cardList = loader.cardList
-                
-                searcher = MdiSearcher(self)
-                self.mdi.addSubWindow(searcher)
-                searcher.show()
+    def showDeck(self, cardList):
+        self.cardList = cardList
+
+        searcher = MdiSearcher(self)
+        self.mdi.addSubWindow(searcher)
+        searcher.show()
+
+    def showLoader(self):
+        if(MdiSearcher.isShown or MdiLoader.isShown): return
+
+        loader = MdiLoader(self)
+        self.mdi.addSubWindow(loader)
+        loader.show()
 
     def createScraper(self, cardName)->dict:
         scraper = WebScraper(self)

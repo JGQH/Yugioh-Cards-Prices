@@ -1,27 +1,31 @@
-from PyQt5.QtWidgets import QFileDialog
-from os import path
-from Extras.WebScraper import WebScraper
-from Extras.WebCard import WebCard
+from PyQt5.QtCore import QRunnable, QObject, pyqtSignal, pyqtSlot
+import traceback, sys
 
-class WebLoader():
-    lastRoute = "C:\\ProjectIgnis\\deck"
+class WebSignals(QObject):
+    finished = pyqtSignal()
+    error = pyqtSignal(tuple)
+    result = pyqtSignal(bool)
 
-    def __init__(self):
-        self.cardList = {}
+class WebLoader(QRunnable):
+    def __init__(self, function, ydk):
+        super(WebLoader, self).__init__()
 
-    def loadYdk(self)->bool:
-        filename = QFileDialog.getOpenFileName(None, "Open YDK file", WebLoader.lastRoute, "YDK files (*.ydk)")[0]
-        WebLoader.lastRoute = path.dirname(filename)
+        self.signals = WebSignals()
+        self.function = function
+        self.ydk = ydk
 
-        if(not (filename) == ""):
-            ydk = open(filename, mode='r', encoding='unicode_escape').read()
-
-            scraper = WebScraper()
-            cardList = scraper.doPricing(ydk)
-            
-            if(len(cardList) > 0):
-                for cardName in cardList:
-                    cardData = cardList[cardName]
-                    self.cardList[cardName] = WebCard(cardName, cardData)
-                return True
-        return False
+    @pyqtSlot()
+    def run(self):
+        response = False
+        try:
+            response = self.function(self.ydk)
+        except:
+            traceback.print_exc()
+            exctype, value = sys.exc_info()[:2]
+            self.signals.error.emit((exctype, value, traceback.format_exc()))
+            pass
+        else:
+            self.signals.result.emit(response)
+        finally:
+            if(response):
+                self.signals.finished.emit()
