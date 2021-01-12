@@ -12,8 +12,6 @@ from Extras.WebCard import WebCard
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-
-        self.cardList = {}
         #Add menu options
         mnbMainMenu = self.menuBar()
 
@@ -36,14 +34,12 @@ class MainWindow(QMainWindow):
         ad.show()
 
     def showDeck(self, cardList):
-        self.cardList = cardList
-
-        searcher = MdiSearcher(self)
+        searcher = MdiSearcher(self, cardList)
         self.mdi.addSubWindow(searcher)
         searcher.show()
 
     def showLoader(self):
-        if(MdiSearcher.isShown or MdiLoader.isShown): return
+        if(MdiLoader.isShown): return
 
         loader = MdiLoader(self)
         self.mdi.addSubWindow(loader)
@@ -54,7 +50,7 @@ class MainWindow(QMainWindow):
         return scraper.doSearch(cardName)
 
     def showViewer(self, card:WebCard, setPrice):
-        if(not MdiViewer.isShown):
+        if(not card.isShown):
             viewer = MdiViewer(self, card, setPrice)
             self.mdi.addSubWindow(viewer)
             viewer.show()

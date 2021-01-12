@@ -4,19 +4,14 @@ from Extras.WebTable import WebTable
 import json
 
 class MdiSearcher(QMdiSubWindow):
-    isShown = False
-
-    def __init__(self, parent):
+    def __init__(self, parent, cardList):
         super().__init__(parent)
-        MdiSearcher.isShown = True
         self.setGeometry(0, 0, 16+500, 33+600)
         self.main = parent
+        self.cardList = cardList
+
         self.setFrame()
         self.showTotal()
-
-    def closeEvent(self, event):
-        MdiSearcher.isShown = False
-        event.accept()
 
     def setFrame(self):
         self.setWindowTitle(".:. Searcher .:.")
@@ -29,11 +24,11 @@ class MdiSearcher(QMdiSubWindow):
         tblSearches = WebTable(self, self.main)
         tblSearches.move(8+10, 25+10)
         tblSearches.resize(480, 550)
-        tblSearches.addRows(self.main.cardList)
+        tblSearches.addRows(self.cardList)
 
     def showTotal(self):
         price = 0
-        for key in self.main.cardList:
-            card:WebCard = self.main.cardList[key]
+        for key in self.cardList:
+            card:WebCard = self.cardList[key]
             price += card.getPrice()
         self.lblTotal.setText("Total price: $%s" % "{:.2f}".format(price))

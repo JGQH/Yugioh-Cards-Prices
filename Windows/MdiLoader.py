@@ -61,7 +61,6 @@ class MdiLoader(QMdiSubWindow):
         return False
 
     def revealYDK(self):
-        print(self.cardList)
         self.main.showDeck(self.cardList)
         self.close()
 

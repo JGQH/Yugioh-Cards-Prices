@@ -3,26 +3,25 @@ from PyQt5.QtGui import QFont
 from Extras.WebCard import WebCard
 
 class MdiViewer(QMdiSubWindow):
-    isShown = False
-
     def __init__(self, parent, card:WebCard, setPrice):
         super().__init__(parent)
-        MdiViewer.isShown = True
+        self.card = card
         self.main = parent
         self.setGeometry(0, 0, 16+230, 33+140)
-        self.setFrame(card, setPrice)
+        self.setFrame(setPrice)
 
     def closeEvent(self, event):
-        MdiViewer.isShown = False
+        self.card.isShown = False
         event.accept()
     
-    def setFrame(self, card:WebCard, setPrice):
+    def setFrame(self, setPrice):
         self.setWindowTitle(".:. Viewer .:.")
+        self.card.isShown = True
 
         lblName = QLabel(self)
         lblName.move(8+10, 25+10)
         lblName.resize(280, 30)
-        lblName.setText(card.name)
+        lblName.setText(self.card.name)
         lblName.setFont(QFont("Times", 20, QFont.Bold))
         
         #Select card set
@@ -34,7 +33,7 @@ class MdiViewer(QMdiSubWindow):
         lstSet = QComboBox(self)
         lstSet.move(8+10, 25+70)
         lstSet.resize(210, 20)
-        lstSet.addItems(card.getSets())
+        lstSet.addItems(self.card.getSets())
 
         #Rarity display
         lblRarity = QLabel(self)
@@ -61,31 +60,31 @@ class MdiViewer(QMdiSubWindow):
         spbQuantity.move(8+170, 25+110)
         spbQuantity.resize(50, 20)
         spbQuantity.setMinimum(1)
-        spbQuantity.setValue(card.quantity)
+        spbQuantity.setValue(self.card.quantity)
 
         #Change tag
         def changeTag(index):
-            price = card.setTag(index)
+            price = self.card.setTag(index)
             lblPrice.setText("Price: $%s" % price)
             setPrice()
 
-        tag = card.selectedPrice["tag"]
+        tag = self.card.selectedPrice["tag"]
         lstPrice.setCurrentIndex(tag)
         lstPrice.currentIndexChanged.connect(changeTag)
 
         #Change set
         def changeSet(index):
-            rarity = card.setIndex(index)
+            rarity = self.card.setIndex(index)
             changeTag(lstPrice.currentIndex())
             lblRarity.setText("Rarity: \n [%s]" % rarity)
         
-        index = card.selectedPrice["index"]
+        index = self.card.selectedPrice["index"]
         lstSet.setCurrentIndex(index)
         lstSet.currentIndexChanged.connect(changeSet)
         changeSet(index)
 
         #Change Quantity
-        def changeQuantity(self):
-            card.quantity = spbQuantity.value()
+        def changeQuantity():
+            self.card.quantity = spbQuantity.value()
             setPrice()
         spbQuantity.valueChanged.connect(changeQuantity)

@@ -3,6 +3,7 @@ import json
 class WebCard():
     def __init__(self, cardName, cardData:dict):
         self.name = cardName
+        self.isShown = False
         self.data = cardData["data"]
         self.quantity = cardData["quantity"]
 
