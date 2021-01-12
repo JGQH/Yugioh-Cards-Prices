@@ -5,8 +5,10 @@ import json
 from Windows.MdiSearcher import MdiSearcher
 from Windows.MdiViewer import MdiViewer
 from Windows.MdiLoader import MdiLoader
+from Windows.MdiAds import MdiAds
 from Extras.WebScraper import WebScraper
 from Extras.WebCard import WebCard
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -26,6 +28,12 @@ class MainWindow(QMainWindow):
 
         #Finish Styling
         self.setWindowTitle("YuGiOh - Cards Prices")
+        self.showAd()
+
+    def showAd(self):
+        ad = MdiAds(self)
+        self.mdi.addSubWindow(ad)
+        ad.show()
 
     def showDeck(self, cardList):
         self.cardList = cardList
