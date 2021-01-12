@@ -1,4 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QMdiArea
+from PyQt5.QtGui import QIcon
+import os
 import sys
 import json
 
@@ -12,6 +14,8 @@ from Extras.WebCard import WebCard
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.loadIcon()
+
         #Add menu options
         mnbMainMenu = self.menuBar()
 
@@ -27,6 +31,15 @@ class MainWindow(QMainWindow):
         #Finish Styling
         self.setWindowTitle("YuGiOh - Cards Prices")
         self.showAd()
+
+    def loadIcon(self):
+        try:
+            basePath = sys._MEIPASS
+        except:
+            basePath = os.path.abspath(".")
+        finalPath = os.path.join(basePath, "appIcon.ico")
+        
+        self.appIcon = QIcon(finalPath)
 
     def showAd(self):
         ad = MdiAds(self)
@@ -59,5 +72,6 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     scd_mng = MainWindow()
+    app.setWindowIcon(scd_mng.appIcon)
     scd_mng.showMaximized()
     sys.exit(app.exec())
