@@ -4,7 +4,7 @@ from Extras.WebTable import WebTable
 import json
 
 class MdiSearcher(QMdiSubWindow):
-    def __init__(self, parent, cardList):
+    def __init__(self, parent, cardList:list):
         super().__init__(parent)
         self.setGeometry(0, 0, 16+500, 33+600)
         self.main = parent
@@ -28,7 +28,6 @@ class MdiSearcher(QMdiSubWindow):
 
     def showTotal(self):
         price = 0
-        for key in self.cardList:
-            card:WebCard = self.cardList[key]
+        for card in self.cardList:
             price += card.getPrice()
         self.lblTotal.setText("Total price: $%s" % "{:.2f}".format(price))

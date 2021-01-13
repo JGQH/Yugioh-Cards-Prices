@@ -16,7 +16,7 @@ class MdiLoader(QMdiSubWindow):
         self.setGeometry(0, 0, 16+140, 33+55)
 
         self.main = parent
-        self.cardList = {}
+        self.cardList = []
         
         if(ydk := self.loadYDK()):
             self.setFrame()
@@ -54,13 +54,14 @@ class MdiLoader(QMdiSubWindow):
         cardList = scraper.doPricing(ydk)
 
         if(len(cardList) > 0):
-            for cardName in cardList:
-                cardData = cardList[cardName]
-                self.cardList[cardName] = WebCard(cardName, cardData)
+            for cardId in cardList:
+                card = WebCard(cardList[cardId])
+                self.cardList.append(card)
             return True
         return False
 
     def revealYDK(self):
+        print(self.cardList)
         self.main.showDeck(self.cardList)
         self.close()
 

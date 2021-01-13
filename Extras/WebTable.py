@@ -8,9 +8,8 @@ class WebTable(QTableWidget):
         self.main = main
         self.setHorizontalHeaderLabels(["Card Name", "Selected Price", "Changer"])
         
-    def addRows(self, cardList:dict):
-        for name in cardList:
-            card = cardList[name]
+    def addRows(self, cardList:list):
+        for card in cardList:
             self.addRow(card)
 
     def addRow(self, card:WebCard):

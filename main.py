@@ -46,7 +46,7 @@ class MainWindow(QMainWindow):
         self.mdi.addSubWindow(ad)
         ad.show()
 
-    def showDeck(self, cardList):
+    def showDeck(self, cardList:list):
         searcher = MdiSearcher(self, cardList)
         self.mdi.addSubWindow(searcher)
         searcher.show()
