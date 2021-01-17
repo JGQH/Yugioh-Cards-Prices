@@ -1,5 +1,4 @@
 from PyQt5.QtWidgets import QMdiSubWindow, QLabel, QComboBox, QSpinBox
-from PyQt5.QtGui import QFont
 from Extras.WebCard import WebCard
 
 class MdiViewer(QMdiSubWindow):
@@ -7,7 +6,7 @@ class MdiViewer(QMdiSubWindow):
         super().__init__(parent)
         self.card = card
         self.main = parent
-        self.setGeometry(0, 0, 16+230, 33+140)
+        self.setGeometry(0, 0, 16+240, 33+130)
         self.setFrame(setPrice)
 
     def closeEvent(self, event):
@@ -15,49 +14,45 @@ class MdiViewer(QMdiSubWindow):
         event.accept()
     
     def setFrame(self, setPrice):
-        self.setWindowTitle(".:. Viewer .:.")
+        self.setWindowTitle(".:. {name} .:.".format(
+            name=self.card.name
+        ))
         self.card.isShown = True
 
-        lblName = QLabel(self)
-        lblName.move(8+10, 25+10)
-        lblName.resize(280, 30)
-        lblName.setText(self.card.name)
-        lblName.setFont(QFont("Times", 20, QFont.Bold))
-        
         #Select card set
         lblSet = QLabel(self)
-        lblSet.move(8+10, 25+50)
+        lblSet.move(8+10, 25+10)
         lblSet.resize(210, 20)
         lblSet.setText("Select origin:")
 
         lstSet = QComboBox(self)
-        lstSet.move(8+10, 25+70)
+        lstSet.move(8+10, 25+40)
         lstSet.resize(210, 20)
         lstSet.addItems(self.card.getSets())
 
         #Rarity display
         lblRarity = QLabel(self)
-        lblRarity.move(8+10, 25+90)
+        lblRarity.move(8+10, 25+70)
         lblRarity.resize(70, 40)
 
         #Select Price
         lblPrice = QLabel(self)
-        lblPrice.move(8+90, 25+90)
+        lblPrice.move(8+90, 25+70)
         lblPrice.resize(70, 20)
 
         lstPrice = QComboBox(self)
-        lstPrice.move(8+90, 25+110)
+        lstPrice.move(8+90, 25+100)
         lstPrice.resize(70, 20)
         lstPrice.addItems(["Lowest", "Average", "Highest"])
 
         #Select Quantity
         lblQuantity = QLabel(self)
-        lblQuantity.move(8+170, 25+90)
+        lblQuantity.move(8+180, 25+70)
         lblQuantity.resize(50, 20)
         lblQuantity.setText("Quantity:")
 
         spbQuantity = QSpinBox(self)
-        spbQuantity.move(8+170, 25+110)
+        spbQuantity.move(8+180, 25+100)
         spbQuantity.resize(50, 20)
         spbQuantity.setMinimum(1)
         spbQuantity.setValue(self.card.quantity)

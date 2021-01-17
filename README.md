@@ -25,6 +25,4 @@ Loading YDK                              | Selecting Prices
 ![Loading YDK](./Resources/readme_1.png) | ![Selecting Prices](./Resources/readme_2.png)
 
 ## To Do
-* Rename windows to reflect .ydk file name
 * Create keys to easily share the price online (When selling a deck based on the .ydk file)
-* Size of name holder when selecting card price

@@ -46,8 +46,8 @@ class MainWindow(QMainWindow):
         self.mdi.addSubWindow(ad)
         ad.show()
 
-    def showDeck(self, cardList:list):
-        searcher = MdiSearcher(self, cardList)
+    def showDeck(self, deckName:str, cardList:list):
+        searcher = MdiSearcher(self, deckName, cardList)
         self.mdi.addSubWindow(searcher)
         searcher.show()
 
@@ -56,7 +56,8 @@ class MainWindow(QMainWindow):
 
         loader = MdiLoader(self)
         self.mdi.addSubWindow(loader)
-        loader.show()
+        if(loader.startLoading()):
+            loader.show()
 
     def createScraper(self, cardName)->dict:
         scraper = WebScraper(self)

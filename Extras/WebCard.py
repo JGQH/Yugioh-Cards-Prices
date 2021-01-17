@@ -5,13 +5,22 @@ class WebCard():
         self.isShown = False
 
         self.name = cardData["name"]
-        self.data = cardData["data"]
+        self.data = cardData["data"][::-1]
         self.quantity = cardData["quantity"]
 
         self.selectedPrice = {
             "index": 0,
             "tag": 1
         }
+
+    def __repr__(self):
+        return str(self)
+
+    def __str__(self):
+        return "{name} x{quantity}".format(
+            name=self.name,
+            quantity=self.quantity
+        )
 
     def getPrice(self)->float:
         index = self.selectedPrice["index"]

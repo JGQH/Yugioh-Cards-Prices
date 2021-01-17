@@ -4,17 +4,19 @@ from Extras.WebTable import WebTable
 import json
 
 class MdiSearcher(QMdiSubWindow):
-    def __init__(self, parent, cardList:list):
+    def __init__(self, parent, deckName:str, cardList:list):
         super().__init__(parent)
         self.setGeometry(0, 0, 16+500, 33+600)
         self.main = parent
         self.cardList = cardList
 
-        self.setFrame()
+        self.setFrame(deckName)
         self.showTotal()
 
-    def setFrame(self):
-        self.setWindowTitle(".:. Searcher .:.")
+    def setFrame(self, deckName:str):
+        self.setWindowTitle(".:. {name} .:.".format(
+            name=deckName
+        ))
 
         lblTotal = QLabel(self)
         lblTotal.move(8+10, 25+570)

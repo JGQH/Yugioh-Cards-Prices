@@ -12,27 +12,34 @@ class MdiLoader(QMdiSubWindow):
 
     def __init__(self, parent):
         super().__init__(parent)
-        MdiLoader.isShown = True
-        self.setGeometry(0, 0, 16+140, 33+55)
-
         self.main = parent
         self.cardList = []
-        
+
+        self.setGeometry(0, 0, 16+140, 33+55)
+    
+    def startLoading(self)->bool:
         if(ydk := self.loadYDK()):
+            MdiLoader.isShown = True
             self.setFrame()
             
             loader = WebLoader(self.priceYDK, ydk)
             loader.signals.finished.connect(self.revealYDK)
             loader.signals.result.connect(self.print_output)
             loader.signals.error.connect(self.print_error)
-            QThreadPool(self).start(loader)        
+            QThreadPool(self).start(loader)
+
+            return True
+        return False
+        
 
     def closeEvent(self, event):
         MdiLoader.isShown = False
         event.accept()
 
     def setFrame(self):
-        self.setWindowTitle(".:. Loader .:.")
+        self.setWindowTitle(".:. {name} .:.".format(
+            name=self.name
+        ))
         
         lblMsg = QLabel(self)
         lblMsg.move(8+10, 25+10)
@@ -45,7 +52,9 @@ class MdiLoader(QMdiSubWindow):
         MdiLoader.lastRoute = path.dirname(filename)
 
         if(filename == ""): return None
-        
+
+        self.name = path.basename(filename)
+
         ydk = open(filename, mode='r', encoding='unicode_escape').read()
         return ydk
 
@@ -62,7 +71,7 @@ class MdiLoader(QMdiSubWindow):
 
     def revealYDK(self):
         print(self.cardList)
-        self.main.showDeck(self.cardList)
+        self.main.showDeck(self.name, self.cardList)
         self.close()
 
     def print_output(self, result):
