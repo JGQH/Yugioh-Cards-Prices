@@ -64,7 +64,7 @@ class MdiLoader(QMdiSubWindow):
 
         if(len(cardList) > 0):
             for cardId in cardList:
-                card = WebCard(cardList[cardId])
+                card = WebCard(int(cardId), cardList[cardId])
                 self.cardList.append(card)
             return True
         return False

@@ -21,7 +21,9 @@ class WebTable(QTableWidget):
         def setPrice():
             priceTag = "$%s (x%i)" % ("{:.2f}".format(card.getPrice()), card.quantity)
             self.setItem(row, 1, QTableWidgetItem(priceTag))
+            
             self.parent.showTotal()
+            self.parent.showCode()
         setPrice()
 
         def doModify():

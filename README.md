@@ -18,6 +18,7 @@ Project created with:
 * PyQt5 v5.15.2
 * PyQtWebEngine v5.15.2
 * requests v2.24.0
+* Cryptography v3.3.1
 
 ## Ilustrations
 Loading YDK                              | Selecting Prices 
@@ -25,4 +26,4 @@ Loading YDK                              | Selecting Prices
 ![Loading YDK](./Resources/readme_1.png) | ![Selecting Prices](./Resources/readme_2.png)
 
 ## To Do
-* Create keys to easily share the price online (When selling a deck based on the .ydk file)
+* Adds method to read the keys using request to the API
