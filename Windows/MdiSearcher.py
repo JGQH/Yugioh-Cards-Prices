@@ -20,43 +20,22 @@ class MdiSearcher(QMdiSubWindow):
             name=deckName
         ))
 
-        lblTotal = QLabel(self)
-        lblTotal.move(8+10, 25+570)
-        lblTotal.resize(140, 20)
-        self.lblTotal = lblTotal
-
-        lblCode = QLabel(self)
-        lblCode.move(8+160, 25+570)
-        lblCode.resize(70, 20)
-        lblCode.setText("Deck code:")
-
-        qleCode = QLineEdit(self)
-        qleCode.move(8+240, 25+570)
-        qleCode.resize(200, 20)
-        qleCode.setReadOnly(True)
-        self.qleCode = qleCode
-
-        btnCopy = QPushButton(self)
-        btnCopy.move(8+450, 25+570)
-        btnCopy.resize(40, 20)
-        btnCopy.setText("Copy")
-        def copy(self):
-            print("Copied code to clipboard")
-            clipboard = QApplication.clipboard()
-            clipboard.setText(qleCode.text())
-        btnCopy.clicked.connect(copy)
-
         tblSearches = WebTable(self, self.main, dataType)
         tblSearches.move(8+10, 25+10)
         tblSearches.resize(480, 550)
         tblSearches.addRows(self.cardList)
+        self.setWidget(tblSearches)
 
-    def showCode(self):
+    def copyCode(self):
+        print("Copied code to clipboard")
         code = "|".join([card.getCode() for card in self.cardList])
-        self.qleCode.setText(encrypt_code(code))
 
-    def showTotal(self):
+        clipboard = QApplication.clipboard()
+        clipboard.setText(encrypt_code(code))
+        pass
+
+    def showTotal(self)->int:
         price = 0
         for card in self.cardList:
             price += card.getPrice()
-        self.lblTotal.setText("Total price: $%s" % "{:.2f}".format(price))
+        return price
