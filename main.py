@@ -8,6 +8,7 @@ from Windows.MdiSearcher import MdiSearcher
 from Windows.MdiViewer import MdiViewer
 from Windows.MdiLoader import MdiLoader
 from Windows.MdiAds import MdiAds
+from Windows.MdiDecoder import MdiDecoder
 from Extras.WebScraper import WebScraper
 from Extras.WebCard import WebCard
 
@@ -20,9 +21,14 @@ class MainWindow(QMainWindow):
         mnbMainMenu = self.menuBar()
 
         #Searcher
-        actDeck = QAction("Upload", self)
-        actDeck.triggered.connect(self.showLoader)
-        mnbMainMenu.addAction(actDeck)
+        actUpload = QAction("Upload", self)
+        actUpload.triggered.connect(self.showLoader)
+        mnbMainMenu.addAction(actUpload)
+
+        #Decoder
+        actDecoder = QAction("Use code", self)
+        actDecoder.triggered.connect(self.showDecoder)
+        mnbMainMenu.addAction(actDecoder)
 
         #MDI
         self.mdi = QMdiArea()
@@ -46,8 +52,8 @@ class MainWindow(QMainWindow):
         self.mdi.addSubWindow(ad)
         ad.show()
 
-    def showDeck(self, deckName:str, cardList:list):
-        searcher = MdiSearcher(self, deckName, cardList)
+    def showDeck(self, deckName:str, cardList:list, dataType:str):
+        searcher = MdiSearcher(self, deckName, cardList, dataType)
         self.mdi.addSubWindow(searcher)
         searcher.show()
 
@@ -58,6 +64,13 @@ class MainWindow(QMainWindow):
         self.mdi.addSubWindow(loader)
         if(loader.startLoading()):
             loader.show()
+    
+    def showDecoder(self):
+        if(MdiLoader.isShown): return
+
+        decoder = MdiDecoder(self)
+        self.mdi.addSubWindow(decoder)
+        decoder.show()
 
     def createScraper(self, cardName)->dict:
         scraper = WebScraper(self)

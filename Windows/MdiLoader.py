@@ -5,6 +5,7 @@ from Extras.WebScraper import WebScraper
 from Extras.WebCard import WebCard
 from os import path
 from Extras.WebLoader import WebLoader
+from Extras.WebData import WebData
 
 class MdiLoader(QMdiSubWindow):
     isShown = False
@@ -17,21 +18,6 @@ class MdiLoader(QMdiSubWindow):
 
         self.setGeometry(0, 0, 16+140, 33+55)
     
-    def startLoading(self)->bool:
-        if(ydk := self.loadYDK()):
-            MdiLoader.isShown = True
-            self.setFrame()
-            
-            loader = WebLoader(self.priceYDK, ydk)
-            loader.signals.finished.connect(self.revealYDK)
-            loader.signals.result.connect(self.print_output)
-            loader.signals.error.connect(self.print_error)
-            QThreadPool(self).start(loader)
-
-            return True
-        return False
-        
-
     def closeEvent(self, event):
         MdiLoader.isShown = False
         event.accept()
@@ -46,6 +32,49 @@ class MdiLoader(QMdiSubWindow):
         lblMsg.resize(120, 35)
         lblMsg.setFont(QFont("Times", 20, QFont.Bold))
         lblMsg.setText("Loading...")
+    
+    #======================================================#
+    #==================== CODE-RELATED ====================#
+    #======================================================#
+    def startSearching(self, code:str):
+        MdiLoader.isShown = True
+        self.name = "[CODE].ydk"
+        self.setFrame()
+            
+        loader = WebLoader(self.priceCode, code)
+        loader.signals.finished.connect(self.revealCode)
+        loader.signals.result.connect(self.print_output)
+        loader.signals.error.connect(self.print_error)
+        QThreadPool(self).start(loader)
+
+    def priceCode(self, code:str)->bool:
+        scraper = WebScraper()
+        cardList = scraper.priceCode(code)
+
+        if(len(cardList) > 0):
+            for cardId in cardList:
+                card = WebData(cardList[cardId])
+
+                self.cardList.append(card)
+            return True
+        return False
+
+    #=====================================================#
+    #==================== YDK-RELATED ====================#
+    #=====================================================#
+    def startLoading(self)->bool:
+        if(ydk := self.loadYDK()):
+            MdiLoader.isShown = True
+            self.setFrame()
+            
+            loader = WebLoader(self.priceYDK, ydk)
+            loader.signals.finished.connect(self.revealYDK)
+            loader.signals.result.connect(self.print_output)
+            loader.signals.error.connect(self.print_error)
+            QThreadPool(self).start(loader)
+
+            return True
+        return False
 
     def loadYDK(self):
         filename = QFileDialog.getOpenFileName(None, "Open YDK file", MdiLoader.lastRoute, "YDK files (*.ydk)")[0]
@@ -60,7 +89,7 @@ class MdiLoader(QMdiSubWindow):
 
     def priceYDK(self, ydk)->bool:
         scraper = WebScraper()
-        cardList = scraper.doPricing(ydk)
+        cardList = scraper.priceYDK(ydk)
 
         if(len(cardList) > 0):
             for cardId in cardList:
@@ -69,14 +98,24 @@ class MdiLoader(QMdiSubWindow):
             return True
         return False
 
+    #========================================================#
+    #==================== THREAD-RELATED ====================#
+    #========================================================#
+    def revealCode(self):
+        print(self.cardList)
+        self.main.showDeck(self.name, self.cardList, "WebData")
+        self.close()
+
     def revealYDK(self):
         print(self.cardList)
-        self.main.showDeck(self.name, self.cardList)
+        self.main.showDeck(self.name, self.cardList, "WebCard")
         self.close()
 
     def print_output(self, result):
+        print("OUTPUT:")
         print(result)
 
     def print_error(self, error):
+        print("ERROR:")
         print(error)
         self.close()

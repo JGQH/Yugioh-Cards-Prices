@@ -6,16 +6,16 @@ from Extras.WebEncryptor import encrypt_code
 import json
 
 class MdiSearcher(QMdiSubWindow):
-    def __init__(self, parent, deckName:str, cardList:list):
+    def __init__(self, parent, deckName:str, cardList:list, dataType:str):
         super().__init__(parent)
         self.setGeometry(0, 0, 16+500, 33+600)
         self.main = parent
         self.cardList = cardList
 
-        self.setFrame(deckName)
+        self.setFrame(deckName, dataType)
         self.showTotal()
 
-    def setFrame(self, deckName:str):
+    def setFrame(self, deckName:str, dataType:str):
         self.setWindowTitle(".:. {name} .:.".format(
             name=deckName
         ))
@@ -46,7 +46,7 @@ class MdiSearcher(QMdiSubWindow):
             clipboard.setText(qleCode.text())
         btnCopy.clicked.connect(copy)
 
-        tblSearches = WebTable(self, self.main)
+        tblSearches = WebTable(self, self.main, dataType)
         tblSearches.move(8+10, 25+10)
         tblSearches.resize(480, 550)
         tblSearches.addRows(self.cardList)
