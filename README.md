@@ -21,9 +21,14 @@ Project created with:
 * Cryptography v3.3.1
 
 ## Ilustrations
-Loading YDK                              | Selecting Prices 
-:---------------------------------------:|:----------------------------------------------:
-![Loading YDK](./Resources/readme_1.png) | ![Selecting Prices](./Resources/readme_2.png)
+
+|Loading YDK| Selecting Prices|
+|:---:|:---:|
+| ![Loading YDK](./Resources/readme_1.png) | ![Selecting Prices](./Resources/readme_2.png) |
+
+|Getting deck's code|Check deck via decks's code|
+|:---:|:---:|
+![Loading YDK](./Resources/readme_3.png) | ![Selecting Prices](./Resources/readme_4.png)
 
 ## To Do
-* Adds method to read the keys using request to the API
+* Add link to a user tutorial

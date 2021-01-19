@@ -30,9 +30,9 @@ class MdiDecoder(QMdiSubWindow):
         def priceCode():
             loader = MdiLoader(self.main)
             self.main.mdi.addSubWindow(loader)
-            loader.show()
-
+            
             code = qleCode.text()
             loader.startSearching(code)
+            loader.show()
             self.close()
         btnCode.clicked.connect(priceCode)
